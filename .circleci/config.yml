@@ -1,0 +1,26 @@
+version: 2.1
+
+executors:
+  nodejs:
+    docker:
+      - image: circleci/node:erbium-bullseye-browsers-legacy
+
+jobs:
+  deploy:
+    executor: nodejs
+    steps:
+      - run:
+          name: Install dependencies
+          command: npm i
+      - run:
+          name: Build application
+          command: npm build
+
+workflows:
+  deploy-dev:
+    jobs:
+      - deploy:
+          name: Deploy dev
+          filters:
+            branches:
+              only: dev
