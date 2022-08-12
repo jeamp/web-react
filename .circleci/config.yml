@@ -3,12 +3,18 @@ version: 2.1
 executors:
   nodejs:
     docker:
-      - image: circleci/node:erbium-bullseye-browsers-legacy
+      - image: cimg/python:3.9.6
     resource_class: medium
 
-orbs:
-  terraform: circleci/terraform@3.1
-
+commands:
+  config_machine:
+    steps:
+      - run:
+          name: Configurando maquina
+          command: |
+            echo -e "\033[7;92m INSTALANDO NODEJS"
+            curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get -y install nodejs
 jobs:
   deploy:
     executor: nodejs
