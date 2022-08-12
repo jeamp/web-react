@@ -15,12 +15,21 @@ jobs:
       - run:
           name: Build application
           command: npm build
+      - run:
+          name: Terraform Build
+          command: |
+            cd terraform
+            terraform init
+            terraform fmt
+            terraform validate
+            terraform apply
 
 workflows:
   deploy-dev:
     jobs:
       - deploy:
           name: Deploy dev
+          context: awsAccount
           filters:
             branches:
               only: dev
