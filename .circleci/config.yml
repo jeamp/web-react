@@ -6,19 +6,25 @@ executors:
       - image: circleci/node:erbium-bullseye-browsers-legacy
     resource_class: medium
 
+orbs:
+  terraform: circleci/terraform@3.1
+
 jobs:
   deploy:
     executor: nodejs
     steps:
+      - run: chmod +x scripts/*
       - run:
           name: Install dependencies
           command: npm i
       - run:
           name: Build application
           command: npm build
+      - run: 
       - run:
           name: Terraform Build
           command: |
+            cd $HOME/project
             ls
 
 
