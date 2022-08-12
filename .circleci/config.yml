@@ -4,6 +4,7 @@ executors:
   nodejs:
     docker:
       - image: circleci/node:erbium-bullseye-browsers-legacy
+      - resource_class: small
 
 jobs:
   deploy:
@@ -19,11 +20,7 @@ jobs:
           name: Terraform Build
           command: |
             ls
-            cd terraform/
-            terraform init
-            terraform fmt
-            terraform validate
-            terraform apply
+
 
 workflows:
   deploy-dev:
