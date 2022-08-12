@@ -18,7 +18,8 @@ jobs:
       - run:
           name: Terraform Build
           command: |
-            cd terraform
+            ls
+            cd terraform/
             terraform init
             terraform fmt
             terraform validate
