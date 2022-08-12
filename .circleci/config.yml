@@ -20,6 +20,7 @@ jobs:
     executor: nodejs
     steps:
       - checkout
+      - config_machine
       - run: chmod +x scripts/*
       - run:
           name: Install dependencies
