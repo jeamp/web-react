@@ -4,7 +4,7 @@ executors:
   nodejs:
     docker:
       - image: circleci/node:erbium-bullseye-browsers-legacy
-      - resource_class: small
+    resource_class: medium
 
 jobs:
   deploy:
