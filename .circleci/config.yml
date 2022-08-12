@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Build application
           command: npm build
-      - run: 
+      - run: ./scripts/install_terraform.sh
       - run:
           name: Terraform Build
           command: |
