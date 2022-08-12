@@ -13,7 +13,7 @@ jobs:
   deploy:
     executor: nodejs
     steps:
-      - run: ls
+      - checkout
       - run: chmod +x scripts/*
       - run:
           name: Install dependencies
@@ -25,8 +25,11 @@ jobs:
       - run:
           name: Terraform Build
           command: |
-            cd $HOME/project
-            ls
+            cd terraform
+            terraform init
+            terraform fmt
+            terraform validate
+            terraform apply
 
 
 workflows:
