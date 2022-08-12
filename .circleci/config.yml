@@ -13,7 +13,7 @@ jobs:
   deploy:
     executor: nodejs
     steps:
-      - run: ls -ltr
+      - run: ls
       - run: chmod +x scripts/*
       - run:
           name: Install dependencies
