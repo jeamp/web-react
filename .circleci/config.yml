@@ -3,48 +3,54 @@ version: 2.1
 executors:
   nodejs:
     docker:
-      - image: cimg/python:3.9.6
+      - image: cimg/node:18.7.0
     resource_class: medium
 
-commands:
-  config_machine:
-    steps:
-      - run:
-          name: Configurando maquina
-          command: |
-            echo -e "\033[7;92m INSTALANDO NODEJS"
-            curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            sudo apt-get -y install nodejs
+orbs: 
+  aws-cli: circleci/aws-cli@3.1
+  terraform: circleci/terraform@3.1.0
+
 jobs:
   deploy:
     executor: nodejs
+    parameters:
+      deploy-env:
+        type: enum
+        enum: ["dev"]
     steps:
       - checkout
-      - config_machine
-      - run: chmod +x scripts/*
+      - aws-cli/setup:
+          profile-name: default
       - run:
           name: Install dependencies
           command: npm i
       - run:
           name: Build application
           command: npm run build
-      - run: ./scripts/install_terraform.sh
-      - run:
-          name: Terraform Build
-          command: |
-            cd terraform
-            terraform init
-            terraform fmt
-            terraform validate
-            terraform apply
-
-
+      - terraform/install:
+          arch: amd64
+          os: linux
+          terraform_version: 0.14.2
+      - terraform/fmt:
+          path: terraform
+      - terraform/validate:
+          path: terraform 
+      - terraform/init:
+          path: terraform
+      - terraform/plan:
+          var_file: <<parameters.deploy-env>>/terraform.tfvars
+          path: terraform
+      - terraform/apply:
+          var_file: <<parameters.deploy-env>>/terraform.tfvars
+          path: terraform
+      
 workflows:
   deploy-dev:
     jobs:
       - deploy:
           name: Deploy dev
           context: awsAccount
+          deploy-env: dev
           filters:
             branches:
               only: dev
